@@ -23,9 +23,13 @@ func initialMigration() *gorm.DB {
 func main() {
 	db := initialMigration()
 	router := echo.New()
-	homeController := controllers.New(db)
+	userController := controllers.NewUserController(db)
 
-	router.GET("/", homeController.Home)
+	router.GET("/users", userController.GetAllUsers)
+	router.POST("/users", userController.CreateUser)
+	router.GET("/users/:id", userController.GetUser)
+	router.PUT("/users/:id", userController.UpdateUser)
+	router.DELETE("/users/:id", userController.DeleteUser)
 
 	router.Logger.Fatal(router.Start(":8000"))
 }
