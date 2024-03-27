@@ -5,8 +5,8 @@ import (
 	"go-api/models"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func initialMigration() *gorm.DB {

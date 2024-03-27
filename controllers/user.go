@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"net/http"
 	"go-api/models"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -33,7 +33,7 @@ func (uc *UserController) GetUser(context echo.Context) error {
 
 func (uc *UserController) CreateUser(context echo.Context) error {
 	type UserPayload struct {
-		Name string `json:"name"`
+		Name  string `json:"name"`
 		Email string `json:"email"`
 	}
 	payload := UserPayload{}
