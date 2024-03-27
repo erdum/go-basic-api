@@ -12,7 +12,7 @@ type HomeController struct {
 	db *gorm.DB
 }
 
-func NewHomeController(db *gorm.DB) *HomeController {
+func New(db *gorm.DB) *HomeController {
 	return &HomeController{
 		db: db,
 	}

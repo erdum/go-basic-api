@@ -9,12 +9,6 @@ import (
 	"gorm.io/driver/sqlite"
 )
 
-type User struct {
-	gorm.Model
-	Name string
-	Email string
-}
-
 func initialMigration() *gorm.DB {
 	db, error := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
 
@@ -28,8 +22,8 @@ func initialMigration() *gorm.DB {
 
 func main() {
 	db := initialMigration()
-	router := echo.New();
-	homeController := controllers.NewHomeController(db)
+	router := echo.New()
+	homeController := controllers.New(db)
 
 	router.GET("/", homeController.Home)
 
