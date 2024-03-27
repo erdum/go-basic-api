@@ -2,18 +2,30 @@ package controllers
 
 import (
 	"net/http"
+	"go-api/models"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type HomeController struct {
-	username string
+	db *gorm.DB
 }
 
-func NewHomeController() *HomeController {
-	return &HomeController{username: "Erdum"}
+func NewHomeController(db *gorm.DB) *HomeController {
+	return &HomeController{
+		db: db,
+	}
 }
 
 func (hc *HomeController) Home(context echo.Context) error {
-	return context.String(http.StatusOK, hc.username)
+
+	user := models.User{Name: "Erdum", Email: "erdumadnan@gmail.com"}
+	result := hc.db.Create(&user)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return context.String(http.StatusOK, user.Email)
 }
