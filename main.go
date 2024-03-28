@@ -3,6 +3,7 @@ package main
 import (
 	"go-api/controllers"
 	"go-api/models"
+	"go-api/services/auth"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/sqlite"
@@ -23,13 +24,20 @@ func initialMigration() *gorm.DB {
 func main() {
 	db := initialMigration()
 	router := echo.New()
-	userController := controllers.NewUserController(db)
 
-	router.GET("/users", userController.GetAllUsers)
-	router.POST("/users", userController.CreateUser)
-	router.GET("/users/:id", userController.GetUser)
-	router.PUT("/users/:id", userController.UpdateUser)
-	router.DELETE("/users/:id", userController.DeleteUser)
+	// Services
+	authService := auth.NewFirebaseAuth(db)
+
+	// Inject services into the controllers
+	authController := controllers.NewAuthController(authService)
+
+	// router.GET("/users", userController.GetAllUsers)
+	// router.POST("/users", userController.CreateUser)
+	// router.GET("/users/:id", userController.GetUser)
+	// router.PUT("/users/:id", userController.UpdateUser)
+	// router.DELETE("/users/:id", userController.DeleteUser)
+
+	router.GET("/login", authController.Login)
 
 	router.Logger.Fatal(router.Start(":8000"))
 }
