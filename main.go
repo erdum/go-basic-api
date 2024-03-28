@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-api/config"
 	"go-api/controllers"
 	"go-api/models"
 	"go-api/services/auth"
@@ -24,6 +25,7 @@ func initialMigration() *gorm.DB {
 func main() {
 	db := initialMigration()
 	router := echo.New()
+	appConfig := config.LoadConfig()
 
 	// Services
 	authService := auth.NewFirebaseAuth(db)
@@ -37,7 +39,9 @@ func main() {
 	// router.PUT("/users/:id", userController.UpdateUser)
 	// router.DELETE("/users/:id", userController.DeleteUser)
 
-	router.GET("/login", authController.Login)
+	router.POST("/login", authController.Login)
 
-	router.Logger.Fatal(router.Start(":8000"))
+	if err := router.Start(":" + appConfig.Port); err != nil {
+		panic(err)
+	}
 }
