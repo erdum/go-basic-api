@@ -1,19 +1,47 @@
 package auth
 
 import (
+	"context"
+	"go-api/config"
+
 	"gorm.io/gorm"
+	"firebase.google.com/go"
+	"google.golang.org/api/option"
 )
 
 type FirebaseAuthService struct {
 	db *gorm.DB
+	appConfig *config.Config
+
 }
 
 func NewFirebaseAuth(db *gorm.DB) AuthService {
-	return &FirebaseAuthService{db: db}
+	return &FirebaseAuthService{db: db, appConfig: config.GetConfig()}
 }
 
 func (auth *FirebaseAuthService) AuthenticateWithThirdParty(
 	idToken string,
-) (bool, error) {
-	return true, nil
+) (interface{}) {
+	ctx := context.Background()
+	conf := &firebase.Config{
+	    ProjectID: "team-lynk-9ab22",
+	}
+	opt := option.WithCredentialsFile(auth.appConfig.FirebaseCredentials)
+	app, err := firebase.NewApp(ctx, conf, opt)
+
+	if err != nil {
+	    return nil
+	}
+	client, err := app.Auth(ctx)
+
+	if err != nil {
+	    return nil
+	}
+	data, err := client.VerifyIDToken(ctx, idToken)
+
+	if err != nil {
+	    return nil
+	}
+
+	return data
 }
