@@ -24,9 +24,9 @@ func (auth *FirebaseAuthService) AuthenticateWithThirdParty(
 ) (interface{}) {
 	ctx := context.Background()
 	conf := &firebase.Config{
-	    ProjectID: "team-lynk-9ab22",
+	    ProjectID: auth.appConfig.Firebase.ProjectId,
 	}
-	opt := option.WithCredentialsFile(auth.appConfig.FirebaseCredentials)
+	opt := option.WithCredentialsFile(auth.appConfig.Firebase.Credentials)
 	app, err := firebase.NewApp(ctx, conf, opt)
 
 	if err != nil {

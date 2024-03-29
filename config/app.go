@@ -6,18 +6,16 @@ import (
 )
 
 type Config struct {
-	Debug               bool
-	Port                string
-	Url                 string
-	FirebaseCredentials string `envconfig:"FIREBASE_CREDENTIALS"`
+	Debug    bool   `default:"true"`
+	Port     string `default:"8000"`
+	Url      string `default:"http://localhost"`
+	Firebase struct {
+		ProjectId   string `split_words:"true"`
+		Credentials string
+	}
 }
 
-var appConfig = &Config{
-	Debug:               true,
-	Port:                "8000",
-	Url:                 "http://localhost",
-	FirebaseCredentials: "firebase_credentials.json",
-}
+var appConfig = &Config{}
 
 func LoadConfig() *Config {
 	godotenv.Load()
