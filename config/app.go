@@ -9,7 +9,7 @@ type Config struct {
 	Debug               bool
 	Port                string
 	Url                 string
-	FirebaseCredentials string
+	FirebaseCredentials string `envconfig:"FIREBASE_CREDENTIALS"`
 }
 
 var appConfig = &Config{
