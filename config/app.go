@@ -19,7 +19,6 @@ var appConfig = &Config{}
 
 func LoadConfig() (*Config, error) {
 	err := godotenv.Load()
-
 	if err != nil {
 		return nil, err
 	}
