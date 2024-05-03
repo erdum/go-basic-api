@@ -28,6 +28,5 @@ func (ac *AuthController) Login(context echo.Context) error {
 	}
 
 	data := ac.authSevice.AuthenticateWithThirdParty(payload.IdToken)
-	return context.NoContent(200)
 	return context.JSON(http.StatusOK, data)
 }
