@@ -1,8 +1,6 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -23,11 +21,11 @@ func LoadConfig() (*Config, error) {
 	err := godotenv.Load()
 
 	if err != nil {
-		return nil, fmt.Errorf(err.Error())
+		return nil, err
 	}
 
 	if err := envconfig.Process("", appConfig); err != nil {
-		return nil, fmt.Errorf(err.Error())
+		return nil, err
 	}
 
 	return appConfig, nil
