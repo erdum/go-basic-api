@@ -6,9 +6,9 @@ import (
 	"go-api/models"
 	"go-api/services/auth"
 	"go-api/validators"
+	"go-api/utils"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -29,6 +29,18 @@ func initialMigration() (*gorm.DB, error) {
 func main() {
 	app := echo.New()
 
+	// System og file
+	err := utils.SetupSystemFileLogger(app, "system.log")
+	if err != nil {
+		app.Logger.Fatal(err)
+	}
+
+	// HTTP Requests log file
+	err := utils.SetupHTTPRequestsLogger(app, "requests.log")
+	if err != nil {
+		app.Logger.Fatal(err)
+	}
+
 	db, err := initialMigration()
 	if err != nil {
 		app.Logger.Fatal(err)
@@ -39,8 +51,6 @@ func main() {
 		app.Logger.Fatal(err)
 	}
 
-	app.Use(middleware.Logger())
-	app.Use(middleware.RequestID())
 	app.Validator = validators.NewDefaultValidator()
 
 	// Services
