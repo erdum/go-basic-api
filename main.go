@@ -28,15 +28,9 @@ func initialMigration() (*gorm.DB, error) {
 
 func main() {
 	app := echo.New()
+	app.Validator = validators.NewDefaultValidator()
 
-	// System og file
-	err := utils.SetupSystemFileLogger(app, "system.log")
-	if err != nil {
-		app.Logger.Fatal(err)
-	}
-
-	// HTTP Requests log file
-	err := utils.SetupHTTPRequestsLogger(app, "requests.log")
+	appConfig, err := config.LoadConfig()
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
@@ -46,12 +40,11 @@ func main() {
 		app.Logger.Fatal(err)
 	}
 
-	appConfig, err := config.LoadConfig()
+	// HTTP Requests log file
+	err = utils.SetupHTTPRequestsLogger(app, "requests.log")
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
-
-	app.Validator = validators.NewDefaultValidator()
 
 	// Services
 	authService := auth.NewFirebaseAuth(db)
