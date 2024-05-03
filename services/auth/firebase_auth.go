@@ -3,10 +3,12 @@ package auth
 import (
 	"context"
 	"go-api/config"
+	"net/http"
 
 	"gorm.io/gorm"
 	"firebase.google.com/go"
 	"google.golang.org/api/option"
+	"github.com/labstack/echo/v4"
 )
 
 type FirebaseAuthService struct {
@@ -30,17 +32,17 @@ func (auth *FirebaseAuthService) AuthenticateWithThirdParty(
 	app, err := firebase.NewApp(ctx, conf, opt)
 
 	if err != nil {
-	    return nil
+	    return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	client, err := app.Auth(ctx)
 
 	if err != nil {
-	    return nil
+	    return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	data, err := client.VerifyIDToken(ctx, idToken)
 
 	if err != nil {
-	    return nil
+	    return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return data
