@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -17,14 +19,18 @@ type Config struct {
 
 var appConfig = &Config{}
 
-func LoadConfig() *Config {
-	godotenv.Load()
+func LoadConfig() (*Config, error) {
+	err := godotenv.Load()
 
-	if err := envconfig.Process("", appConfig); err != nil {
-		panic(err)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
 	}
 
-	return appConfig
+	if err := envconfig.Process("", appConfig); err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	return appConfig, nil
 }
 
 func GetConfig() *Config {
