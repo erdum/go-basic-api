@@ -5,6 +5,7 @@ import (
 	"go-api/controllers"
 	"go-api/models"
 	"go-api/services/auth"
+	"go-api/validators"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/sqlite"
@@ -26,6 +27,7 @@ func main() {
 	db := initialMigration()
 	router := echo.New()
 	appConfig := config.LoadConfig()
+	router.Validator = validators.NewDefaultValidator()
 
 	// Services
 	authService := auth.NewFirebaseAuth(db)
