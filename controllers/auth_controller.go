@@ -27,6 +27,10 @@ func (ac *AuthController) Login(context echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	data := ac.authSevice.AuthenticateWithThirdParty(payload.IdToken)
+	data, err := ac.authSevice.AuthenticateWithThirdParty(payload.IdToken)
+	if err != nil {
+		return err
+	}
+
 	return context.JSON(http.StatusOK, data)
 }

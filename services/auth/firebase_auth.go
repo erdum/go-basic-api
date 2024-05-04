@@ -23,7 +23,7 @@ func NewFirebaseAuth(db *gorm.DB) AuthService {
 
 func (auth *FirebaseAuthService) AuthenticateWithThirdParty(
 	idToken string,
-) (interface{}) {
+) (interface{}, error) {
 	ctx := context.Background()
 	conf := &firebase.Config{
 	    ProjectID: auth.appConfig.Firebase.ProjectId,
@@ -32,18 +32,18 @@ func (auth *FirebaseAuthService) AuthenticateWithThirdParty(
 	app, err := firebase.NewApp(ctx, conf, opt)
 
 	if err != nil {
-	    return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	    return nil, echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	client, err := app.Auth(ctx)
 
 	if err != nil {
-	    return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	    return nil, echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	data, err := client.VerifyIDToken(ctx, idToken)
 
 	if err != nil {
-	    return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	    return nil, echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	return data
+	return data, nil
 }
