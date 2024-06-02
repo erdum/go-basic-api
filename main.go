@@ -29,9 +29,7 @@ func initialMigration() (*gorm.DB, error) {
 
 func main() {
 	app := echo.New()
-	app.Use(middleware.RequestIDWithConfig(middleware.RequestIDConfig{
-		TargetHeader: "Request-Id",
-	}))
+	app.Use(middleware.RequestID())
 	app.Validator = validators.NewDefaultValidator()
 
 	appConfig, err := config.LoadConfig()
