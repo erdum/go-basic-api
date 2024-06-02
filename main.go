@@ -9,6 +9,7 @@ import (
 	"go-api/utils"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -28,6 +29,9 @@ func initialMigration() (*gorm.DB, error) {
 
 func main() {
 	app := echo.New()
+	app.Use(middleware.RequestIDWithConfig(middleware.RequestIDConfig{
+		TargetHeader: "Request-Id",
+	}))
 	app.Validator = validators.NewDefaultValidator()
 
 	appConfig, err := config.LoadConfig()
