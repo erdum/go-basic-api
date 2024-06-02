@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// HTTP Requests log file
-	err = utils.SetupHTTPRequestsLogger(app, "requests.log")
+	err = utils.SetupHTTPRequestsLogger(app, "requests.log", "error.log")
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
